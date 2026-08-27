@@ -1,14 +1,20 @@
 """
-持币等级系统
+派友记（PI Life）— 持币等级计算
+"""
+from config import LEVEL_MAP
 
-来源: 全新
-逻辑: 余额 → 等级 → 权限映射
 
-等级设计(参考):
-  Lv0 新手村民: 0 PI Life      → 只读
-  Lv1 派友: 100+ PI Life       → 发帖+群聊
-  Lv2 资深派友: 1000+ PI Life  → 发帖+群聊+AI日记
-  Lv3 派友达人: 5000+ PI Life  → 全功能+情绪签+温度计
-  Lv4 派友长老: 20000+ PI Life → 全功能+公告发布权限
-""")
-# TODO
+def calculate_level(balance: int) -> int:
+    """
+    根据持币余额计算等级（0~4）
+    照搬暖忆录分层权重的设计思路[reference:31]
+    """
+    for level, info in LEVEL_MAP.items():
+        if info["min"] <= balance <= info["max"]:
+            return level
+    return 0  # 默认青铜
+
+
+def get_level_info(level: int) -> dict:
+    """获取等级详细信息"""
+    return LEVEL_MAP.get(level, LEVEL_MAP[0])
